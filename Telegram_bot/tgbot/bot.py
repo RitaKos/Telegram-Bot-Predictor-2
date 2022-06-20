@@ -12,6 +12,7 @@ from handlers.admin import register_admin
 from handlers.user import register_user
 from handlers.user import register_about
 from handlers.user import register_topics
+from handlers.user import register_file
 from handlers.user import register_topic1
 from handlers.user import register_user_mess
 from middlewares.db import DbMiddleware
@@ -30,6 +31,7 @@ def register_all_handlers(dp):
     register_user(dp)
     register_about(dp)
     register_topics(dp)
+    register_file(dp)
     register_topic1(dp)
     register_user_mess(dp)
 

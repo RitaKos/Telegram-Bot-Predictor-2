@@ -1,11 +1,18 @@
 from aiogram import Dispatcher, md
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import *
+from random import Random, random, choice
+
+topic1_list=[]
+topic2_list=[]
+topic3_list=[]
+topic4_list=[]
+new_list=[]
 
 
 async def user_start(com: Message):
     '''
-    Receive start message from user.
+    Receive start command from user.
     Greeting user by name.
     :param command:
     :param message: str
@@ -16,10 +23,20 @@ async def user_start(com: Message):
 
 
 def register_user(dp: Dispatcher):
+    '''
+    Register massage with start command in handler
+    :param dp:
+    :return:
+    '''
     dp.register_message_handler(user_start, commands=['start'], content_types=['text'], is_admin=False)
 
 
 async def user_about(com: Message):
+    '''
+    Answer to /about command received by user
+    :param com:
+    :return:
+    '''
     await com.answer(
         '''Hello! I am bot-oracle.
         No,no..Not that Oracle.. :D
@@ -38,10 +55,20 @@ async def user_about(com: Message):
 
 
 def register_about(dp: Dispatcher):
+    '''
+    Register massage with /about command in handler
+    :param dp:
+    :return:
+    '''
     dp.register_message_handler(user_about, commands=['about'], content_types=['text'], is_admin=False)
 
 
 async def user_topics(com: Message):
+    '''
+    Send topics list to user
+    :param com:
+    :return:
+    '''
     topics=['/topic1','/topic2','/topic3','/topic4']
     await com.answer(md.text(md.bold('What you want to know?'),
                      md.text('🔸', md.bold('Do or not to do:'), md.code(topics[0])),
@@ -53,17 +80,64 @@ async def user_topics(com: Message):
 
 
 def register_topics(dp: Dispatcher):
-        dp.register_message_handler(user_topics, commands=['topics'], content_types=['text'], is_admin=False)
+    '''
+    Register massage with /topics command in handler
+    :param dp:
+    :return:
+    '''
+    dp.register_message_handler(user_topics, commands=['topics'], content_types=['text'], is_admin=False)
 
+async def get_file_id(f: Message):
+    '''
+    Get file_id from received video, add it to list
+    :param f: Massage
+    :return: str
+    '''
+    file=str(f.video.file_id)
+    topic1_list.append(file)
+    return file
+   # In progress: defining the right topic of video. As well, list should store data in file.
+# Know it is updates every run process
+   # text=file.get_file(f)
+   # if text=='topic1':
+   # if text == 'topic2':
+   #     topic2_list.append(file_id)
+   # if text == 'topic3':
+  #      topic3_list.append(file_id)
+  #  if text == 'topic4':
+  #      topic4_list.append(file_id)
+  #  else: new_list.append(file_id)
+
+
+
+def register_file(dp: Dispatcher):
+    '''
+    Admin send video for getting file_id
+    :param dp:
+    :return:
+    '''
+    dp.register_message_handler(get_file_id, content_types=['video'])
 
 async def cmd_topic1(mes: Message):
-   #with open('C:\Users\User\Downloads\Telegram Desktop\Торопиться не надо.mp4', 'rb') as video:
-       await mes.answer_video(open("C:\Users\User\Downloads\Telegram Desktop\Торопиться не надо.mp4", 'rb'))
+    '''
+    Send answer to user according his request (topic1).
+    Choice is random from local storage.
+    :param mes:
+    :return:
+    '''
 
+    answer = choice(topic1_list)
+    await mes.answer_video(video=answer,protect_content=True)
 
 
 def register_topic1(dp: Dispatcher):
-    dp.register_message_handler(cmd_topic1, commands=['topic1'], content_types=['text'], is_admin=False)
+    '''
+    Register massage with /topic1 command in handler
+    :param dp:
+    :return:
+    '''
+    dp.register_message_handler(cmd_topic1, commands=['topic1'], content_types=['text'])
+
 async def get_text_message(message: Message):
     '''
     Receive text message from user and answer.
