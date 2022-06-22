@@ -10,15 +10,15 @@ topic1_list_full=topic1_file_list.read_text().rsplit() # get list from file
 
 topic2_list=[]
 topic2_file_list= Path('video2') #write list to file
-topic2_list_full=topic1_file_list.read_text().rsplit() # get list from file
+topic2_list_full=topic2_file_list.read_text().rsplit() # get list from file
 
 topic3_list=[]
 topic3_file_list= Path('video3') #write list to file
-topic3_list_full=topic1_file_list.read_text().rsplit() # get list from file
+topic3_list_full=topic3_file_list.read_text().rsplit() # get list from file
 
 topic4_list=[]
 topic4_file_list= Path('video4') #write list to file
-topic4_list_full=topic1_file_list.read_text().rsplit() # get list from file
+topic4_list_full=topic4_file_list.read_text().rsplit() # get list from file
 
 new_list=[]
 
@@ -107,20 +107,47 @@ async def get_file_id(f: Message):
     :return: str
     '''
     file=str(f.video.file_id)
-    if f.caption == 1:
-        topic1_list.append(file)
-        topic1_file_list.write_text('\n'.join(topic1_list))
-    if f.caption == 2:
-        topic2_list.append(file)
-        topic2_file_list.write_text('\n'.join(topic2_list))
-    if f.caption == 3:
-        topic3_list.append(file)
-        topic3_file_list.write_text('\n'.join(topic3_list))
-    if f.caption == 4:
-        topic4_list.append(file)
-        topic4_file_list.write_text('\n'.join(topic4_list))
+    if  f.caption == '1':
+            topic1_list.append(file)
+            try:
+                topic1_file_list.write_text('\n'.join(topic1_list))
+                await f.answer(f'File {file} is added to the list 1')
+            except FileNotFoundError:
+                f.answer('Not found file for writing')
+            finally:
+                return file
 
-    await f.answer(f'File {file} is added to the list')
+    if  f.caption == '2':
+            topic2_list.append(file)
+            try:
+                topic2_file_list.write_text('\n'.join(topic2_list))
+                await f.answer(f'File {file} is added to the list 2')
+            except FileNotFoundError:
+                f.answer('Not found file for writing')
+            finally:
+                return file
+
+    if  f.caption == '3':
+            topic3_list.append(file)
+            try:
+                topic3_file_list.write_text('\n'.join(topic3_list))
+                await f.answer(f'File {file} is added to the list 3')
+            except FileNotFoundError:
+                f.answer('Not found file for writing')
+            finally:
+                return file
+
+    if  f.caption == '4':
+            topic4_list.append(file)
+            try:
+                topic4_file_list.write_text('\n'.join(topic4_list))
+                await f.answer(f'File {file} is added to the list 4')
+            except FileNotFoundError:
+                f.answer('Not found file for writing')
+            finally:
+                return file
+    else:
+            await f.answer(f'File {file} topic is not defined')
     return file
 
 
