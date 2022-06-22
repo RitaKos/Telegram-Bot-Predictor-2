@@ -2,8 +2,11 @@ from aiogram import Dispatcher, md
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import *
 from random import Random, random, choice
+from  pathlib import Path
 
 topic1_list=[]
+topic1_file_list= Path('video.txt')
+topic1_list_full=topic1_file_list.read_text().splitlines()
 topic2_list=[]
 topic3_list=[]
 topic4_list=[]
@@ -95,6 +98,8 @@ async def get_file_id(f: Message):
     '''
     file=str(f.video.file_id)
     topic1_list.append(file)
+    topic1_file_list.write_text('\n'.join(topic1_list))
+    await f.answer(f'File {file} is added to the list')
     return file
    # In progress: defining the right topic of video. As well, list should store data in file.
 # Know it is updates every run process
@@ -126,7 +131,7 @@ async def cmd_topic1(mes: Message):
     :return:
     '''
 
-    answer = choice(topic1_list)
+    answer = choice(topic1_list_full)
     await mes.answer_video(video=answer,protect_content=True)
 
 
