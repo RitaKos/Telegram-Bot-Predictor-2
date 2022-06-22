@@ -5,11 +5,21 @@ from random import Random, random, choice
 from  pathlib import Path
 
 topic1_list=[]
-topic1_file_list= Path('video.txt')
-topic1_list_full=topic1_file_list.read_text().splitlines()
+topic1_file_list= Path('video1') #write list to file
+topic1_list_full=topic1_file_list.read_text().rsplit() # get list from file
+
 topic2_list=[]
+topic2_file_list= Path('video2') #write list to file
+topic2_list_full=topic1_file_list.read_text().rsplit() # get list from file
+
 topic3_list=[]
+topic3_file_list= Path('video3') #write list to file
+topic3_list_full=topic1_file_list.read_text().rsplit() # get list from file
+
 topic4_list=[]
+topic4_file_list= Path('video4') #write list to file
+topic4_list_full=topic1_file_list.read_text().rsplit() # get list from file
+
 new_list=[]
 
 
@@ -92,36 +102,35 @@ def register_topics(dp: Dispatcher):
 
 async def get_file_id(f: Message):
     '''
-    Get file_id from received video, add it to list
+    Get file_id from received video1, add it to list
     :param f: Massage
     :return: str
     '''
     file=str(f.video.file_id)
-    topic1_list.append(file)
-    topic1_file_list.write_text('\n'.join(topic1_list))
+    if f.caption == 1:
+        topic1_list.append(file)
+        topic1_file_list.write_text('\n'.join(topic1_list))
+    if f.caption == 2:
+        topic2_list.append(file)
+        topic2_file_list.write_text('\n'.join(topic2_list))
+    if f.caption == 3:
+        topic3_list.append(file)
+        topic3_file_list.write_text('\n'.join(topic3_list))
+    if f.caption == 4:
+        topic4_list.append(file)
+        topic4_file_list.write_text('\n'.join(topic4_list))
+
     await f.answer(f'File {file} is added to the list')
     return file
-   # In progress: defining the right topic of video. As well, list should store data in file.
-# Know it is updates every run process
-   # text=file.get_file(f)
-   # if text=='topic1':
-   # if text == 'topic2':
-   #     topic2_list.append(file_id)
-   # if text == 'topic3':
-  #      topic3_list.append(file_id)
-  #  if text == 'topic4':
-  #      topic4_list.append(file_id)
-  #  else: new_list.append(file_id)
-
 
 
 def register_file(dp: Dispatcher):
     '''
-    Admin send video for getting file_id
+    Admin send video1 for getting file_id
     :param dp:
     :return:
     '''
-    dp.register_message_handler(get_file_id, content_types=['video'])
+    dp.register_message_handler(get_file_id, content_types=['video1'])
 
 async def cmd_topic1(mes: Message):
     '''
