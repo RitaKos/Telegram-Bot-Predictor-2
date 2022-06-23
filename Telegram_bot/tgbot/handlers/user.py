@@ -1,26 +1,8 @@
 from aiogram import Dispatcher, md
-from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import *
-from random import Random, random, choice
-from  pathlib import Path
-
-topic1_list=[]
-topic1_file_list= Path('video1') #write list to file
-topic1_list_full=topic1_file_list.read_text().rsplit() # get list from file
-
-topic2_list=[]
-topic2_file_list= Path('video2') #write list to file
-topic2_list_full=topic2_file_list.read_text().rsplit() # get list from file
-
-topic3_list=[]
-topic3_file_list= Path('video3') #write list to file
-topic3_list_full=topic3_file_list.read_text().rsplit() # get list from file
-
-topic4_list=[]
-topic4_file_list= Path('video4') #write list to file
-topic4_list_full=topic4_file_list.read_text().rsplit() # get list from file
-
-new_list=[]
+from random import choice
+from Telegram_bot.tgbot.allocator.video_lists import *
+from Telegram_bot.tgbot.allocator.topics import *
 
 
 async def user_start(com: Message):
@@ -34,10 +16,10 @@ async def user_start(com: Message):
     user_location = com.from_user.language_code
     if user_location == 'ru':
         await com.answer(
-        f"Привет, {com.from_user.first_name}! \nХм..так..так... \nКажется, кому-то нужен мой совет. Не так ли? ")
+            f"Привет, {com.from_user.first_name}! \nХм..так..так... \nКажется, кому-то нужен мой совет. Не так ли? ")
     else:
         await com.answer(
-        f"Hello, {com.from_user.first_name}! \nHm..Well, well.. \nI guess, you need my advice. Isn\'t it? ")
+            f"Hello, {com.from_user.first_name}! \nHm..Well, well.. \nI guess, you need my advice. Isn\'t it? ")
 
 
 def register_user(dp: Dispatcher):
@@ -73,7 +55,7 @@ async def user_about(com: Message):
         )
     else:
         await com.answer(
-        '''Hello! I am bot-oracle.
+            '''Hello! I am bot-oracle.
         No,no..Not that Oracle.. :D
         
         I can look into the future and help you to make a decision.
@@ -86,7 +68,7 @@ async def user_about(com: Message):
         And, hey... Don't forget! It's our secret ;)
         
         '''
-    )
+        )
 
 
 def register_about(dp: Dispatcher):
@@ -104,7 +86,7 @@ async def user_topics(com: Message):
     :param com:
     :return:
     '''
-    topics = ['/topic1', '/topic2', '/topic3', '/topic4']
+
     user_location = com.from_user.language_code
     if user_location == 'ru':
         await com.answer(md.text(md.bold('Итак, что ты хочешь спросить?'),
@@ -116,12 +98,12 @@ async def user_topics(com: Message):
                                  ))
     else:
         await com.answer(md.text(md.bold('What you want to know?'),
-                     md.text('🔸', md.bold('Do or not to do:'), md.code(topics[0])),
-                     md.text('🔸', md.bold('What is behind:'), md.code(topics[1])),
-                     md.text('🔸', md.bold('About some person:'), md.code(topics[2])),
-                     md.text('🔸', md.bold('What do you need:'), md.code(topics[3])),
-                     sep='\n',
-                     ))
+                                 md.text('🔸', md.bold('Do or not to do:'), md.code(topics[0])),
+                                 md.text('🔸', md.bold('What is behind:'), md.code(topics[1])),
+                                 md.text('🔸', md.bold('About some person:'), md.code(topics[2])),
+                                 md.text('🔸', md.bold('What do you need:'), md.code(topics[3])),
+                                 sep='\n',
+                                 ))
 
 
 def register_topics(dp: Dispatcher):
@@ -132,6 +114,7 @@ def register_topics(dp: Dispatcher):
     '''
     dp.register_message_handler(user_topics, commands=['topics'], content_types=['text'], is_admin=False)
 
+
 async def get_file_id(f: Message):
     '''
     Get file_id from received video1, add it to list
@@ -139,47 +122,47 @@ async def get_file_id(f: Message):
     :return: str
     '''
     file = str(f.video.file_id)
-    if  str(f.caption) == 't1':
-            topic1_list.append(file)
-            try:
-                topic1_file_list.write_text('\n'.join(topic1_list))
-                await f.answer(f'File {file} is added to the list 1')
-            except FileNotFoundError:
-                await f.answer('Not found file for writing')
-            finally:
-                return file
+    if str(f.caption) == 't1':
+        topic1_list.append(file)
+        try:
+            topic1_file_list.write_text('\n'.join(topic1_list))
+            await f.answer(f'File {file} is added to the list 1')
+        except FileNotFoundError:
+            await f.answer('Not found file for writing')
+        finally:
+            return file
 
-    if  str(f.caption) =='t2':
-            topic2_list.append(file)
-            try:
-                topic2_file_list.write_text('\n'.join(topic2_list))
-                await f.answer(f'File {file} is added to the list 2')
-            except FileNotFoundError:
-                await f.answer('Not found file for writing')
-            finally:
-                return file
+    if str(f.caption) == 't2':
+        topic2_list.append(file)
+        try:
+            topic2_file_list.write_text('\n'.join(topic2_list))
+            await f.answer(f'File {file} is added to the list 2')
+        except FileNotFoundError:
+            await f.answer('Not found file for writing')
+        finally:
+            return file
 
-    if  str(f.caption) == 't3':
-            topic3_list.append(file)
-            try:
-                topic3_file_list.write_text('\n'.join(topic3_list))
-                await f.answer(f'File {file} is added to the list 3')
-            except FileNotFoundError:
-                await f.answer('Not found file for writing')
-            finally:
-                return file
+    if str(f.caption) == 't3':
+        topic3_list.append(file)
+        try:
+            topic3_file_list.write_text('\n'.join(topic3_list))
+            await f.answer(f'File {file} is added to the list 3')
+        except FileNotFoundError:
+            await f.answer('Not found file for writing')
+        finally:
+            return file
 
-    if  str(f.caption) == 't4':
-            topic4_list.append(file)
-            try:
-                topic4_file_list.write_text('\n'.join(topic4_list))
-                await f.answer(f'File {file} is added to the list 4')
-            except FileNotFoundError:
-                await f.answer('Not found file for writing')
-            finally:
-                return file
+    if str(f.caption) == 't4':
+        topic4_list.append(file)
+        try:
+            topic4_file_list.write_text('\n'.join(topic4_list))
+            await f.answer(f'File {file} is added to the list 4')
+        except FileNotFoundError:
+            await f.answer('Not found file for writing')
+        finally:
+            return file
     else:
-            await f.answer(f'File {file} topic is not defined')
+        await f.answer(f'File {file} topic is not defined')
     return file
 
 
@@ -191,6 +174,7 @@ def register_file(dp: Dispatcher):
     '''
     dp.register_message_handler(get_file_id, content_types=['video'])
 
+
 async def cmd_topic1(mes: Message):
     '''
     Send answer to user according his request (topic1).
@@ -201,8 +185,10 @@ async def cmd_topic1(mes: Message):
     user_location = mes.from_user.language_code
     if user_location == 'ru':
         answer = choice(topic1_list_full)
-        await mes.answer_video(video=answer,protect_content=True)
-    else: pass
+        await mes.answer_video(video=answer, protect_content=True)
+    else:
+        pass
+
 
 def register_topic1(dp: Dispatcher):
     '''
@@ -211,6 +197,7 @@ def register_topic1(dp: Dispatcher):
     :return:
     '''
     dp.register_message_handler(cmd_topic1, commands=['topic1'], content_types=['text'])
+
 
 async def get_text_message(message: Message):
     '''
@@ -221,7 +208,7 @@ async def get_text_message(message: Message):
 
     if message.text.lower() in {'hi', 'hello', 'good afternoon', 'good morning', 'good evening'}:
         return await message.answer('Hello!!!You looking great today!')
-    if message.text.lower() in {'привет', 'приветик', 'здарова', 'здравствуй', 'салют','хай'}:
+    if message.text.lower() in {'привет', 'приветик', 'здарова', 'здравствуй', 'салют', 'хай'}:
         return await message.answer('Ой, привет! Ты выглядишь супер сегодня!')
 
     if message.text.lower() in {'thank', 'thanks', 'thank you', 'thnks'}:
@@ -257,11 +244,22 @@ async def get_text_message(message: Message):
         return await message.answer(
             ''' Good !
             Let\'s try to find answers! Choose the /topics, which is much closer to you problem ''')
-    if message.text.lower() in {'да', 'ок', 'ага', 'может быть', 'наверное', 'возможно', 'угадал', 'верно'}:
+    if message.text.lower() in {'да', 'ок', 'ага', 'может','может быть', 'наверное', 'возможно', 'угадал', 'верно'}:
         return await message.answer(
             ''' Отлично !
                 Давай попробуем найти ответы на твои вопросы! 
                 Выбери вопрос из /topics, который максимально близок к твоему вопросу ''')
+    if message.text.lower() in {'ладно','давай'}:
+
+        return await message.answer(
+            md.text(md.bold('Итак, что ты хочешь спросить?'),
+                    md.text('🔸', md.bold('Делать или не делать:'), md.code(topics[0])),
+                    md.text('🔸', md.bold('Что ждет впереди:'), md.code(topics[1])),
+                    md.text('🔸', md.bold('Вопрос о некотором человеке:'), md.code(topics[2])),
+                    md.text('🔸', md.bold('Что мне нужно делать в ситуации:'), md.code(topics[3])),
+                    sep='\n',
+                    )
+        )
     else:
         user_location = message.from_user.language_code
         if user_location == 'ru':
@@ -274,7 +272,7 @@ async def get_text_message(message: Message):
                 Хочешь узнать обо мне побольше, кликни /about ''')
         else:
             return await message.reply(
-            '''I would talk about it another time, ok? 
+                '''I would talk about it another time, ok? 
             
             And now let\'s try to find answers! Choose the /topics, which is much closer to you problem.
             
@@ -283,4 +281,3 @@ async def get_text_message(message: Message):
 
 def register_user_mess(dp: Dispatcher):
     dp.register_message_handler(get_text_message, content_types=['text'], is_admin=False)
-
